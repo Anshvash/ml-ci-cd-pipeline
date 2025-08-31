@@ -17,13 +17,13 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'   # or 3.10/3.9 to match your project
+          python-version: '3.11'   # Change if needed
           cache: 'pip'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          # If you RENAME the file to repo root as "requirements.txt", change the next line accordingly
+          # Adjust the path if you rename or move requirements.txt
           pip install -r requirement/requirements.txt
 
       - name: Train Model
