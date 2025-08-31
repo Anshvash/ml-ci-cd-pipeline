@@ -2,36 +2,41 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  build:
+  test-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'  # Change if needed
-          cache: 'pip'
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirement.txt   # Now points to the real file
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirement/requirements.txt  # Adjust path if renamed/moved
+          pip install -r requirement.txt           # Correct file name
 
-      - name: Train Model
+      - name: Train model
         run: python model/train.py
 
-      - name: Evaluate Model
+      - name: Evaluate model
         run: python model/evaluate.py
 
-      - name: Run Unit Tests
+      - name: Run unit tests
         run: python -m unittest discover -s tests -p "test_*.py"
 
       - name: Deploy to Render
