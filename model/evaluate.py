@@ -1,6 +1,7 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_scoreimport joblib
+from sklearn.metrics import accuracy_score
+import joblib
 
 # Load the dataset
 data = pd.read_csv('data/iris.csv')
