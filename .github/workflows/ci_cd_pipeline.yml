@@ -1,3 +1,4 @@
+#ci_cdpipeline.yml
 name: CI/CD Pipeline
 
 on:
@@ -7,7 +8,6 @@ on:
   pull_request:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
   build:
@@ -15,17 +15,17 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
+      uses: actions/checkout@v2
 
     - name: Set up Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v2
       with:
-        python-version: '3.11'
+        python-version: '3.13.2'
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirement.txt
+        pip install -r requirements.txt
 
     - name: Train Model
       run: |
@@ -37,16 +37,10 @@ jobs:
 
     - name: Run Unit Tests
       run: |
-        python -m unittest discover -s tests -p "test_*.py"
+        python -m unittest discover -s tests
 
     - name: Deploy to Render
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      env:
-        RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
-        RENDER_SERVICE_ID: ${{ secrets.RENDER_SERVICE_ID }}
       run: |
-        curl -X POST "https://api.render.com/v1/services/${RENDER_SERVICE_ID}/deploys" \
-          -H "Accept: application/json" \
-          -H "Authorization: Bearer ${RENDER_API_KEY}" \
-          -H "Content-Type: application/json" \
-          -d '{}'
+        curl -X POST"https://api.render.com/v1/services/${{secrets.RENDER_SERVICE_ID}}/deploys"\
+        -H "Accept: application/json"\
+        -H "Authorization: Bearer ${{secrets.RENDER_API_KEY}}"

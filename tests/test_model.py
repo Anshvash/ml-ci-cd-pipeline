@@ -1,18 +1,16 @@
-import os
 import unittest
 import joblib
 from sklearn.ensemble import RandomForestClassifier
+import os
 
-MODEL_PATH = "model/iris_model.pkl"
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))  # go one level up
+data_path = os.path.join(BASE_DIR, 'iris_model.pkl')
+model = joblib.load(data_path)
 
 class TestModelTraining(unittest.TestCase):
-    def test_model_file_exists(self):
-        self.assertTrue(os.path.exists(MODEL_PATH))
-
     def test_model_training(self):
-        model = joblib.load(MODEL_PATH)
+        # model = joblib.load('iris_model.pkl')
         self.assertIsInstance(model, RandomForestClassifier)
-        self.assertTrue(hasattr(model, "feature_importances_"))
         self.assertGreaterEqual(len(model.feature_importances_), 4)
 
 if __name__ == '__main__':

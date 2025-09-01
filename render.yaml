@@ -3,6 +3,6 @@ services:
     name: ml-flask-api
     env: python
     plan: free
-    buildCommand: "pip install -r requirement.txt"
+    buildCommand: "pip install -r requirements.txt"
     startCommand: "gunicorn app:app --bind 0.0.0.0:$PORT"
-    autoDeploy: false #we'll trigger deploys via github access
+    autoDeploy: false   # We'll trigger deploys via GitHub Actions
